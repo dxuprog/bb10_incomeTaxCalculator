@@ -13,13 +13,31 @@
 #include <string>
 #include <stdio.h>
 #include <iostream>
+#include <QObject>
+#include <bb/cascades/AbstractPane>
+#include <bb/system/SystemDialog>
+#include <bb/system/SystemListDialog>
+#include <bb/system/SystemProgressDialog>
+#include <bb/system/SystemPrompt>
+#include <bb/system/SystemCredentialsPrompt>
+#include <bb/system/SystemToast>
+#include <bb/system/SystemProgressToast>
+#include <bb/system/SystemUiButton>
+#include <bb/system/SystemUiInputField>
+#include <bb/system/SystemUiError>
+#include <bb/system/SystemUiInputMode>
+#include <bb/system/SystemUiModality>
+#include <bb/system/SystemUiPosition>
+#include <bb/system/SystemUiProgressState>
+#include <bb/system/SystemUiResult>
+#include <bb/system/SystemUiReturnKeyAction>
 
+using namespace bb::system;
 class IncomeTaxObject : public QObject {
 
 	Q_OBJECT
 	Q_PROPERTY(QString annualIncome READ getAnnualIncome WRITE setAnnualIncome NOTIFY annualIncomeChanged)
 	Q_PROPERTY(int province READ getProvince WRITE setProvince NOTIFY provinceChanged)
-	//Q_PROPERTY(QString incomeTax READ getIncomeTax WRITE setIncomeTax NOTIFY incomeTaxChanged)
 	Q_PROPERTY(QString afterTaxIncome READ getAfterTaxIncome WRITE setAfterTaxIncome NOTIFY afterTaxIncomeChanged)
     Q_PROPERTY(QString averageTaxRate READ getAverageTaxRate WRITE setAverageTaxRate NOTIFY averageTaxRateChanged)
     Q_PROPERTY(QString totalIncomeTax READ getTotalIncomeTax WRITE setTotalIncomeTax NOTIFY totalIncomeTaxChanged)
@@ -35,8 +53,6 @@ public:
 	QString getAnnualIncome();
 	void setProvince(int i);
 	int getProvince();
-	//void setIncomeTax(QString i);
-	//QString getIncomeTax();
 	void setAfterTaxIncome(QString i);
 	QString getAfterTaxIncome();
 	void setAverageTaxRate(QString i);
@@ -64,7 +80,6 @@ private:
 
 	QString m_iAnnualIncome;
 	int m_iProvince;
-//	QString m_iIncomeTax;
 	QString m_iAfterTaxIncome;
 	QString m_iAverageTaxRate;
 	QString m_iTotalIncomeTax;

@@ -1,27 +1,73 @@
 // Default empty project template
 import bb.cascades 1.0
+import bb.system 1.0
 
 // creates one page with a label
 Page {
+    attachedObjects: 
+        [
+        SystemDialog {
+            id: myQmlDialog
+            title: "Disclamer"
+            body: "This application estimates income taxes based on the 2013 Canadian"
+            +" tax rates and surtaxes posted by the federal and provinical bodies. "
+            +"The calculations assume only individual " 
+            + "basic federal and provincial tax credits."
+            +"\n\n"
+            +"The creator of this application is not responsible for any "
+            +"loss or damages that may occur from the use of this app."
+            +" This application is for estimation purposes only."
+            +"\n\n"
+            +"Press OK to agree, or Cancel to exit the application."
+        
+            onFinished: {
+                if (myQmlDialog.result == SystemUiResult.CancelButtonSelection) Application.quit();
+            }
+        }
+    ]
+    onCreationCompleted: {
+            myQmlDialog.show()
+    }
+
     Container {
-        background: Color.DarkGray
-        Label {
-            text: "Canadian Income Tax Calculator 2013"
-            horizontalAlignment: HorizontalAlignment.Center
-            textStyle.fontSize: FontSize.Large
+        background: Color.create("#dd000000")
+        Container{
+            background: Color.Gray
+            preferredWidth: 1280.0
+            preferredHeight: 100.0
+            verticalAlignment: VerticalAlignment.Center
+            implicitLayoutAnimationsEnabled: true
+            opacity: 1.0
+            layout: StackLayout {
+                orientation: LayoutOrientation.TopToBottom
+            }
+            Container
+            {
+                // stack horizontal spacer
+            }
+            Label {
+                text: "Canadian Income Tax Calculator 2013"
+                horizontalAlignment: HorizontalAlignment.Center
+                textStyle.fontSize: FontSize.Medium
+                textStyle.color: Color.White
+                verticalAlignment: VerticalAlignment.Center
+            }
         }
         layout: StackLayout {
             orientation: LayoutOrientation.TopToBottom
         }
         verticalAlignment: VerticalAlignment.Fill
         horizontalAlignment: HorizontalAlignment.Fill
-        
+        Container {
+            // stack horizontal spacer
+            preferredHeight: 50.0
+        }
         Container
         {
             layout: StackLayout 
-                    {
-                         orientation: LayoutOrientation.LeftToRight
-                     }
+            {
+                 orientation: LayoutOrientation.LeftToRight
+             }
             horizontalAlignment: HorizontalAlignment.Center
             Label {
                 text: "$"
@@ -31,6 +77,7 @@ Page {
                 verticalAlignment: VerticalAlignment.Center
                 horizontalAlignment: HorizontalAlignment.Center
                 textStyle.fontSize: FontSize.XLarge
+                textStyle.color: Color.White
             }
             TextField {
                 id: annualIncomeField
@@ -48,10 +95,14 @@ Page {
 
             }
         }
+        Container {
+            // stack horizontal spacer
+            preferredHeight: 25.0
+        }
         DropDown {
             id: provinceDropDown
             horizontalAlignment: HorizontalAlignment.Center
-            title: "Select Province"
+            title: "Select Province to Calculate"
             maxWidth: 615.0
             options: Option {
                 text: "Alberta"
@@ -109,7 +160,11 @@ Page {
                 {
                     incomeTaxObject.province = selectedOption.value
                     provinceDropDown.title = "Province: "
-                } 
+            } 
+        }
+        Container {
+            // stack horizontal spacer
+            preferredHeight: 25.0
         }
         Container {
             layout: StackLayout {
@@ -118,91 +173,93 @@ Page {
             horizontalAlignment: HorizontalAlignment.Center
             verticalAlignment: VerticalAlignment.Center
             Container {
-                
                 layout: StackLayout {
                 }
                 verticalAlignment: VerticalAlignment.Center
                 horizontalAlignment: HorizontalAlignment.Center
-                minWidth: 450.0
+                minWidth: 0.0
                 leftPadding: 50.0
-                //  minHeight: 384.0
-              //  topMargin: 50.0
-              //  topPadding: 25.0
+                preferredWidth: 425.0
                 Label {
                     text: "Average Tax Rate:"
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Right
                     bottomMargin: 50.0
                     topMargin: 50.0
+                    textStyle.color: Color.White
                 }
                 Label {
                     text: "Total Income Tax:"
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Right
                     bottomMargin: 50.0
+                    textStyle.color: Color.White
                 }
                 Label {
                     text: "After Tax Income:"
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Right
+                    textStyle.color: Color.White
                 }
             }
             Container {
                 leftPadding: 25.0
                 horizontalAlignment: HorizontalAlignment.Center
                 verticalAlignment: VerticalAlignment.Center
-                minWidth: 384.0
-           //     minHeight: 384.0
-              //  preferredHeight: 384.0
-                preferredWidth: 384.0
+                minWidth: 0.0
+                preferredWidth: 350.0
                 Label {
-                    //maxWidth: 200.0
                     bottomMargin: 50.0
                     topMargin: 50.0
                     id: averageTaxRateField
                     text: incomeTaxObject.averageTaxRate
+                    textStyle.color: Color.White
                 }
                 Label {
                     id: totalIncomeTaxField
                     text: incomeTaxObject.totalIncomeTax
                     bottomMargin: 50.0
                     topMargin: 50.0
-                    // maxWidth: 250.0
+                    textStyle.color: Color.White
                 }
                 Label {
                     id: afterTaxIncomeField
-               //     maxWidth: 250.0
                     text: incomeTaxObject.afterTaxIncome
-                    bottomMargin: 50.0
+                    bottomMargin: 25.0
+                    textStyle.color: Color.White
                 }
             }
         }
         Container
         {
-            
             layout: StackLayout 
             {
                 orientation: LayoutOrientation.LeftToRight
             }
             horizontalAlignment: HorizontalAlignment.Center
             verticalAlignment: VerticalAlignment.Bottom
-            topPadding: 75.0
-            Button 
-            {
+            topPadding: 50.0
+            Button {
                 text: "Calculate"
-                onClicked:
-                {
-                        incomeTaxObject.calculate();
+                onClicked: {
+                    incomeTaxObject.calculate();
                 }
+                minHeight: 0.0
+                minWidth: 0.0
+                preferredWidth: 300.0
             }
             Button 
             {
-                text: "Clear"
+                text: "Clear Fields"
                 onClicked: 
                 {
                         incomeTaxObject.reset();
-                        provinceDropDown.setSelectedOption(0);
+                        provinceDropDown.resetSelectedOption();
+                        provinceDropDown.setTitle("Select Province to Calculate");
                 }
+                minHeight: 0.0
+                minWidth: 0.0
+                preferredWidth: 300.0
             }
         }
     }

@@ -8,13 +8,10 @@
 #include "IncomeTaxObject.h"
 
 IncomeTaxObject::IncomeTaxObject() {
-	// TODO Auto-generated constructor stub
-	// m_iAnnualIncome;
 	m_iProvince = 0;
-	//m_iIncomeTax = "0";
-	m_iAfterTaxIncome = "0";
-	m_iAverageTaxRate = "0";
-	m_iTotalIncomeTax = "0";
+	m_iAfterTaxIncome = "--";
+	m_iAverageTaxRate = "--";
+	m_iTotalIncomeTax = "--";
 
 	federalTaxCredit = 11038;
 
@@ -192,17 +189,6 @@ int IncomeTaxObject::getProvince()
 	return m_iProvince;
 }
 
-/*void IncomeTaxObject::setIncomeTax(QString i)
-{
-	m_iIncomeTax = i;
-	emit incomeTaxChanged(m_iIncomeTax);
-}
-
-QString IncomeTaxObject::getIncomeTax()
-{
-	return m_iIncomeTax;
-}*/
-
 void IncomeTaxObject::setAfterTaxIncome(QString i)
 {
     m_iAfterTaxIncome = i;
@@ -246,7 +232,6 @@ void IncomeTaxObject::calculate()
 	double lProvincialIncomeTaxDouble = calculateProvincialTax(lAnnualIncomeDouble, getProvince());
 	double lAfterTaxIncome = lAnnualIncomeDouble - lFederalIncomeTaxDouble - lProvincialIncomeTaxDouble;
 	double lTotalIncomeTax = lFederalIncomeTaxDouble+lProvincialIncomeTaxDouble;
-	//double lAverageTaxRate = (lTotalIncomeTax/lAnnualIncome);
 	double lAverageTaxRate = 0.0;
 	if (lAnnualIncomeDouble != 0.0)
 	{
@@ -261,9 +246,9 @@ void IncomeTaxObject::reset()
 {
 	setAnnualIncome("");
 	setProvince(0);
-	setAfterTaxIncome("");
-	setTotalIncomeTax("");
-	setAverageTaxRate("");
+	setAfterTaxIncome("--");
+	setTotalIncomeTax("--");
+	setAverageTaxRate("--");
 }
 
 double IncomeTaxObject::calculateFederalTax(double aInAnnualIncome, int aInProvince)
