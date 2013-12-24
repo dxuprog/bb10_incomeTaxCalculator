@@ -237,9 +237,9 @@ void IncomeTaxObject::calculate()
 	{
 	    lAverageTaxRate = (lTotalIncomeTax/lAnnualIncomeDouble)*100;
 	}
-	setAfterTaxIncome(QString("$")+QString::number(lAfterTaxIncome,'f',2));
-	setTotalIncomeTax(QString("$"+QString::number(lTotalIncomeTax, 'f', 2)));
-	setAverageTaxRate(QString("%"+QString::number(lAverageTaxRate, 'f', 2)));
+	setAfterTaxIncome(QString("$")+formatCommas(QString::number(lAfterTaxIncome,'f',2)));
+	setTotalIncomeTax(QString("$"+formatCommas(QString::number(lTotalIncomeTax, 'f', 2))));
+	setAverageTaxRate(QString(QString::number(lAverageTaxRate, 'f', 2))+"%");
 }
 
 void IncomeTaxObject::reset()
@@ -355,4 +355,18 @@ double IncomeTaxObject::calculateProvincialTax(double aInAnnualIncome, int aInPr
    {
      return 0.0;
    }
+}
+
+// Make the dollar figures look pretty by addding appropriate commas.
+// There probably already is a Qt method for this.
+QString IncomeTaxObject::formatCommas(QString aInNumbers)
+{
+    int lPos = aInNumbers.lastIndexOf('.');
+
+    while (lPos > 3)
+    {
+        lPos -= 3;
+        aInNumbers.insert(lPos, ',');
+    }
+    return aInNumbers;
 }

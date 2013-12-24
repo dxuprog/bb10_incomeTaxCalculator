@@ -4,6 +4,7 @@ import bb.system 1.0
 
 // creates one page with a label
 Page {
+    /**
     attachedObjects: 
         [
         SystemDialog {
@@ -28,7 +29,7 @@ Page {
     onCreationCompleted: {
             myQmlDialog.show()
     }
-
+*/
     Container {
         background: Color.create("#dd000000")
         Container{

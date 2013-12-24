@@ -87,6 +87,7 @@ private:
     ProvinceStruct m_iProvinceStruct [13];
 	double calculateFederalTax(double, int);
 	double calculateProvincialTax(double, int);
+	QString formatCommas(QString);
 };
 
 #endif /* INCOMETAXOBJECT_H_ */
