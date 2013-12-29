@@ -242,8 +242,11 @@ Page {
             topPadding: 50.0
             Button {
                 text: "Calculate"
-                onClicked: {
+                onClicked: 
+                {
                     incomeTaxObject.calculate();
+                    totalIncomeTaxField.textStyle.setColor(Color.Red);
+                    afterTaxIncomeField.textStyle.setColor(Color.DarkGreen);
                 }
                 minHeight: 0.0
                 minWidth: 0.0
@@ -257,6 +260,8 @@ Page {
                         incomeTaxObject.reset();
                         provinceDropDown.resetSelectedOption();
                         provinceDropDown.setTitle("Select Province to Calculate");
+                        totalIncomeTaxField.textStyle.setColor(Color.White);
+                        afterTaxIncomeField.textStyle.setColor(Color.White);
                 }
                 minHeight: 0.0
                 minWidth: 0.0
