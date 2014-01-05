@@ -91,7 +91,7 @@ Page {
                     incomeTaxObject.annualIncome = annualIncomeField.text
                 }
                 autoFit: TextAutoFit.Default
-                textStyle.fontSize: FontSize.XLarge
+                textStyle.fontSize: FontSize.Large
                 textFormat: TextFormat.Plain
 
             }
@@ -99,6 +99,37 @@ Page {
         Container {
             // stack horizontal spacer
             preferredHeight: 25.0
+        }
+
+        Container {
+            layout: StackLayout {
+                orientation: LayoutOrientation.LeftToRight
+            }
+            horizontalAlignment: HorizontalAlignment.Center
+            Label {
+                text: "$"
+                multiline: false
+                textStyle.textAlign: TextAlign.Default
+                visible: true
+                verticalAlignment: VerticalAlignment.Center
+                horizontalAlignment: HorizontalAlignment.Center
+                textStyle.fontSize: FontSize.XLarge
+                textStyle.color: Color.White
+            }
+            TextField {
+                id: rrspContributionField
+                hintText: "Enter RRSP Contribution"
+                inputMode: TextFieldInputMode.NumbersAndPunctuation
+                maxWidth: 555.0
+                horizontalAlignment: HorizontalAlignment.Center
+                text: incomeTaxObject.rrspContribution
+                onTextChanged: {
+                    incomeTaxObject.rrspContribution = rrspContributionField.text
+                }
+                autoFit: TextAutoFit.Default
+                textStyle.fontSize: FontSize.Large
+                textFormat: TextFormat.Plain
+            }
         }
         DropDown {
             id: provinceDropDown
@@ -167,6 +198,7 @@ Page {
             // stack horizontal spacer
             preferredHeight: 25.0
         }
+        
         Container {
             layout: StackLayout {
                 orientation: LayoutOrientation.LeftToRight
@@ -200,6 +232,14 @@ Page {
                     text: "After Tax Income:"
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Right
+                    bottomMargin: 50.0
+                    textStyle.color: Color.White
+                }
+                Label {
+                    text: "Tax Savings:"
+                    verticalAlignment: VerticalAlignment.Center
+                    horizontalAlignment: HorizontalAlignment.Right
+                    bottomMargin: 50.0
                     textStyle.color: Color.White
                 }
             }
@@ -226,6 +266,12 @@ Page {
                 Label {
                     id: afterTaxIncomeField
                     text: incomeTaxObject.afterTaxIncome
+                    bottomMargin: 50.0
+                    textStyle.color: Color.White
+                }
+                Label {
+                    id: taxSavingsField
+                    text: incomeTaxObject.taxSavings
                     bottomMargin: 25.0
                     textStyle.color: Color.White
                 }
@@ -246,7 +292,8 @@ Page {
                 {
                     incomeTaxObject.calculate();
                     totalIncomeTaxField.textStyle.setColor(Color.Red);
-                    afterTaxIncomeField.textStyle.setColor(Color.DarkGreen);
+                    afterTaxIncomeField.textStyle.setColor(Color.Green);
+                    taxSavingsField.textStyle.setColor(Color.Green);
                 }
                 minHeight: 0.0
                 minWidth: 0.0
@@ -262,6 +309,7 @@ Page {
                         provinceDropDown.setTitle("Select Province to Calculate");
                         totalIncomeTaxField.textStyle.setColor(Color.White);
                         afterTaxIncomeField.textStyle.setColor(Color.White);
+                        taxSavingsField.textStyle.setColor(Color.White);
                 }
                 minHeight: 0.0
                 minWidth: 0.0

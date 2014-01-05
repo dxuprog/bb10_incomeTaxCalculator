@@ -12,6 +12,7 @@ IncomeTaxObject::IncomeTaxObject() {
 	m_iAfterTaxIncome = "--";
 	m_iAverageTaxRate = "--";
 	m_iTotalIncomeTax = "--";
+    m_iTaxSavings = "--";
 
 	federalTaxCredit = 11038;
 
@@ -50,13 +51,13 @@ IncomeTaxObject::IncomeTaxObject() {
    m_iProvinceStruct[3].provinceName = "New Brunswick";
    m_iProvinceStruct[3].provinceCredit = 9388.0;
    m_iProvinceStruct[3].taxTiers = 4;
-   m_iProvinceStruct[3].percent[0] = 9.1;
+   m_iProvinceStruct[3].percent[0] = 9.39;
    m_iProvinceStruct[3].amount[0] = 38954.0;
-   m_iProvinceStruct[3].percent[1] = 12.1;
+   m_iProvinceStruct[3].percent[1] = 13.46;
    m_iProvinceStruct[3].amount[1] = 38954.0;
-   m_iProvinceStruct[3].percent[2] = 12.4;
+   m_iProvinceStruct[3].percent[2] = 14.46;
    m_iProvinceStruct[3].amount[2] = 48754.0;
-   m_iProvinceStruct[3].percent[3] = 14.3;
+   m_iProvinceStruct[3].percent[3] = 16.07;
 
    //Newfoundland & Labrador
    m_iProvinceStruct[4].provinceName = "Newfoundland & Labrador";
@@ -178,6 +179,17 @@ QString IncomeTaxObject::getAnnualIncome()
 	return m_iAnnualIncome;
 }
 
+void IncomeTaxObject::setRrspContribution(QString i)
+{
+    m_iRrspContribution = i;
+    emit rrspContributionChanged(m_iRrspContribution);
+}
+
+QString IncomeTaxObject::getRrspContribution()
+{
+    return m_iRrspContribution;
+}
+
 void IncomeTaxObject::setProvince(int i)
 {
 	m_iProvince = i;
@@ -223,6 +235,17 @@ QString IncomeTaxObject::getTotalIncomeTax()
     return m_iTotalIncomeTax;
 }
 
+void IncomeTaxObject::setTaxSavings(QString i)
+{
+    m_iTaxSavings= i;
+    emit taxSavingsChanged(m_iTaxSavings);
+}
+
+QString IncomeTaxObject::getTaxSavings()
+{
+    return m_iTaxSavings;
+}
+
 void IncomeTaxObject::calculate()
 {
 	bool isAnnualIncomeOk;
@@ -230,6 +253,13 @@ void IncomeTaxObject::calculate()
 	double lAnnualIncomeDouble = lAnnualIncome.toDouble(&isAnnualIncomeOk);
 	double lFederalIncomeTaxDouble = calculateFederalTax(lAnnualIncomeDouble, getProvince());
 	double lProvincialIncomeTaxDouble = calculateProvincialTax(lAnnualIncomeDouble, getProvince());
+
+	bool isRrspContributionOk;
+	QString lRrspContribution = getRrspContribution();
+	double lRrspContributionDouble = lRrspContribution.toDouble(&isRrspContributionOk);
+	double lAnnualIncomeDoubleRrspDeducted = lAnnualIncomeDouble - lRrspContributionDouble;
+
+
 	double lAfterTaxIncome = lAnnualIncomeDouble - lFederalIncomeTaxDouble - lProvincialIncomeTaxDouble;
 	double lTotalIncomeTax = lFederalIncomeTaxDouble+lProvincialIncomeTaxDouble;
 	double lAverageTaxRate = 0.0;
@@ -237,9 +267,17 @@ void IncomeTaxObject::calculate()
 	{
 	    lAverageTaxRate = (lTotalIncomeTax/lAnnualIncomeDouble)*100;
 	}
+    double lTaxSavings = lTotalIncomeTax - calculateFederalTax(lAnnualIncomeDoubleRrspDeducted ,getProvince())
+            - calculateProvincialTax(lAnnualIncomeDoubleRrspDeducted, getProvince());
+    if (lTaxSavings < 0.00)
+    {
+        lTaxSavings = 0.00;
+    }
+
 	setAfterTaxIncome(QString("$")+formatCommas(QString::number(lAfterTaxIncome,'f',2)));
 	setTotalIncomeTax(QString("$"+formatCommas(QString::number(lTotalIncomeTax, 'f', 2))));
 	setAverageTaxRate(QString(QString::number(lAverageTaxRate, 'f', 2))+"%");
+    setTaxSavings(QString("$")+formatCommas(QString::number(lTaxSavings, 'f', 2)));
 }
 
 void IncomeTaxObject::reset()
@@ -249,6 +287,7 @@ void IncomeTaxObject::reset()
 	setAfterTaxIncome("--");
 	setTotalIncomeTax("--");
 	setAverageTaxRate("--");
+    setTaxSavings("--");
 }
 
 double IncomeTaxObject::calculateFederalTax(double aInAnnualIncome, int aInProvince)
@@ -329,7 +368,7 @@ double IncomeTaxObject::calculateProvincialTax(double aInAnnualIncome, int aInPr
 
    if (lProvincialTax > 0.0)
    {
-     //calculate Surtax if in Ontario or Yukon
+     //calculate Surtax if in Ontario, PEI or Yukon
      double surTax = 0;
      if (aInProvince == 8)
      {
@@ -340,6 +379,13 @@ double IncomeTaxObject::calculateProvincialTax(double aInAnnualIncome, int aInPr
          if (lProvincialTax > 5489.0)
          {
              surTax += 0.36*(lProvincialTax-5489.0);
+         }
+     }
+     else if (aInProvince == 9)
+     {
+         if (lProvincialTax > 12500.0)
+         {
+             surTax += 0.15*(lProvincialTax-12500.0);
          }
      }
      else if (aInProvince == 12)

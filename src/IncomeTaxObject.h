@@ -37,10 +37,12 @@ class IncomeTaxObject : public QObject {
 
 	Q_OBJECT
 	Q_PROPERTY(QString annualIncome READ getAnnualIncome WRITE setAnnualIncome NOTIFY annualIncomeChanged)
+    Q_PROPERTY(QString rrspContribution READ getRrspContribution WRITE setRrspContribution NOTIFY rrspContributionChanged)
 	Q_PROPERTY(int province READ getProvince WRITE setProvince NOTIFY provinceChanged)
 	Q_PROPERTY(QString afterTaxIncome READ getAfterTaxIncome WRITE setAfterTaxIncome NOTIFY afterTaxIncomeChanged)
     Q_PROPERTY(QString averageTaxRate READ getAverageTaxRate WRITE setAverageTaxRate NOTIFY averageTaxRateChanged)
     Q_PROPERTY(QString totalIncomeTax READ getTotalIncomeTax WRITE setTotalIncomeTax NOTIFY totalIncomeTaxChanged)
+    Q_PROPERTY(QString taxSavings READ getTaxSavings WRITE setTaxSavings NOTIFY taxSavingsChanged)
 
 public:
 	IncomeTaxObject();
@@ -51,6 +53,8 @@ public:
 
 	void setAnnualIncome(QString i);
 	QString getAnnualIncome();
+    void setRrspContribution(QString i);
+    QString getRrspContribution();
 	void setProvince(int i);
 	int getProvince();
 	void setAfterTaxIncome(QString i);
@@ -59,14 +63,18 @@ public:
 	QString getAverageTaxRate();
 	void setTotalIncomeTax(QString i);
 	QString getTotalIncomeTax();
+    void setTaxSavings(QString i);
+    QString getTaxSavings();
 
 signals:
 	void annualIncomeChanged(QString);
+    void rrspContributionChanged(QString);
 	void provinceChanged(int);
 	//void incomeTaxChanged(QString);
 	void afterTaxIncomeChanged(QString);
 	void averageTaxRateChanged(QString);
 	void totalIncomeTaxChanged(QString);
+    void taxSavingsChanged(QString);
 
 private:
 	struct ProvinceStruct
@@ -79,10 +87,12 @@ private:
 	};
 
 	QString m_iAnnualIncome;
+    QString m_iRrspContribution;
 	int m_iProvince;
 	QString m_iAfterTaxIncome;
 	QString m_iAverageTaxRate;
 	QString m_iTotalIncomeTax;
+    QString m_iTaxSavings;
 	double federalTaxCredit;
     ProvinceStruct m_iProvinceStruct [13];
 	double calculateFederalTax(double, int);
