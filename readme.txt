@@ -1,1 +1,0 @@
-BB10 App Created by David Xu
